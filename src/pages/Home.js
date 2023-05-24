@@ -1,19 +1,27 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Logo from '../assets/litiainalogo.png';
 
-function HomePage() {
+const HomePage = () => {
+  const [output, setOutput] = useState(null); 
+
+  useEffect(() => {
+    axios.get('https://api.publicapis.org/entries')
+      .then(response => {
+        console.log(response.data.entries);
+        setOutput(response.data.entries);
+      });
+  }, []);
+
   return (
-    <div className="homepage">
-      <div className="header">
-        <h1>Welcome to My Website!</h1>
-      </div>
-      <div className="content">
-        <p>Thank you for visiting my website. I hope you enjoy your stay!</p>
-      </div>
-      <div className="footer">
-        <p>&copy; 2023 MyWebsite.com. All rights reserved.</p>
-      </div>
+    <div style={{ backgroundColor: 'black' }}>
+      <center>
+        <h1>L I T I A I N A</h1>
+        <img src={Logo} alt="Logo" />
+      </center>
     </div>
   );
-}
+};
 
 export default HomePage;
