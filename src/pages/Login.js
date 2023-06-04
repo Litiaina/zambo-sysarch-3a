@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import axios from 'axios';
 import './LoginStyle.css';
+
+axios.defaults.baseURL = 'http://localhost:3000';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -20,7 +22,7 @@ function Login() {
     try {
       const response = await axios.post('/login', { email, password });
       console.log(response.data.message);
-      window.location.href = 'https://www.google.com';
+      window.location.href = '/home';
     } catch (error) {
       console.error('Error logging in:', error.response.data.message);
       // TODO: Handle login error, e.g., display an error message to the user

@@ -1,10 +1,12 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 
+require('dotenv').config();
+
 const app = express();
 app.use(express.json());
 
-const uri = "mongodb+srv://Altear:AltearLitiaina123@litiaina-db.bwah3yf.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.ATLAS_URL;
 const client = new MongoClient(uri);
 
 // Connect to MongoDB
@@ -78,6 +80,9 @@ app.post('/login', async (req, res) => {
     }
   });
   
+  app.get("/message", (req, res) => {
+    res.json({ message: "Hello from server!" });
+  });
 
 // Start the server
 const port = 3000;
