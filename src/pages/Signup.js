@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './LoginStyle.css';
-import { Alert } from 'bootstrap';
-
-axios.defaults.baseURL = 'http://localhost:3000';
 
 function Signup() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [baseURL, setBaseURL] = useState('');
+
+  useEffect(() => {
+    const getBaseURL = async () => {
+      try {
+        const response = await axios.get('/message');
+        const serverURL = response.config.baseURL;
+        setBaseURL(serverURL);
+      } catch (error) {
+        console.error('Error getting base URL:', error);
+      }
+    };
+
+    getBaseURL();
+  }, []);
 
   const handleFullNameChange = (e) => {
     setFullName(e.target.value);
@@ -26,16 +38,16 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/register', {
+      const response = await axios.post(`${baseURL}/register`, {
         fullName,
         email,
         password,
       });
       console.log(response.data.message);
-      alert("Register Success");
+      alert('Register Success');
     } catch (error) {
       console.error('Error signing up:', error.response.data.message);
-      alert("Register Failed");
+      alert('Register Failed');
     }
   };
 
