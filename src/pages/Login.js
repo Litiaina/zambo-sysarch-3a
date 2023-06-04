@@ -22,10 +22,11 @@ function Login() {
     try {
       const response = await axios.post('/login', { email, password });
       console.log(response.data.message);
-      window.location.href = '/home';
+      alert("Successful Login");
+      window.location.href = '/';
     } catch (error) {
       console.error('Error logging in:', error.response.data.message);
-      // TODO: Handle login error, e.g., display an error message to the user
+      alert("Failed Login");
     }
   };
 

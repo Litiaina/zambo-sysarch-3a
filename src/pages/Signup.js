@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './LoginStyle.css';
+import { Alert } from 'bootstrap';
+
+axios.defaults.baseURL = 'http://localhost:3000';
 
 function Signup() {
   const [fullName, setFullName] = useState('');
@@ -29,10 +32,10 @@ function Signup() {
         password,
       });
       console.log(response.data.message);
-      // TODO: Handle successful sign-up, e.g., show a success message to the user
+      alert("Register Success");
     } catch (error) {
       console.error('Error signing up:', error.response.data.message);
-      // TODO: Handle sign-up error, e.g., display an error message to the user
+      alert("Register Failed");
     }
   };
 
