@@ -1,26 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import axios from 'axios';
 import './LoginStyle.css';
+
+axios.defaults.baseURL = 'http://localhost:3000';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [baseURL, setBaseURL] = useState('');
-
-  useEffect(() => {
-    const getBaseURL = async () => {
-      try {
-        const response = await axios.get('/message');
-        const serverURL = response.config.baseURL;
-        setBaseURL(serverURL);
-      } catch (error) {
-        console.error('Error getting base URL:', error);
-      }
-    };
-
-    getBaseURL();
-  }, []);
-
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -33,13 +20,13 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${baseURL}/login`, { email, password });
+      const response = await axios.post('/login', { email, password });
       console.log(response.data.message);
-      alert('Successful Login');
-      window.location.href = '/';
+      alert("Successful Login");
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error('Error logging in:', error.response.data.message);
-      alert('Failed Login');
+      alert("Failed Login");
     }
   };
 
