@@ -1,27 +1,79 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Logo from '../assets/litiainalogo.png';
+import { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import headerImg from "../assets/img/header-img.png";
+import { ArrowRightCircle } from 'react-bootstrap-icons';
+import 'animate.css';
+import TrackVisibility from 'react-on-screen';
 
-const HomePage = () => {
-  const [output, setOutput] = useState(null); 
+const Dashboard = () => {
+  const [loopNum, setLoopNum] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [text, setText] = useState('');
+  const [delta, setDelta] = useState(300 - Math.random() * 100);
+  const [index, setIndex] = useState(1)
+  const toRotate = [ "the First Being, to have existed long before the world came into being." ];
+  const period = 2000;
 
   useEffect(() => {
-    axios.get('https://api.publicapis.org/entries')
-      .then(response => {
-        console.log(response.data.entries);
-        setOutput(response.data.entries);
-      });
-  }, []);
+    let ticker = setInterval(() => {
+      tick();
+    }, delta);
+
+    return () => { clearInterval(ticker) };
+  }, [text])
+
+  const tick = () => {
+    let i = loopNum % toRotate.length;
+    let fullText = toRotate[i];
+    let updatedText = isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1);
+
+    setText(updatedText);
+
+    if (isDeleting) {
+      setDelta(prevDelta => prevDelta / 2);
+    }
+
+    if (!isDeleting && updatedText === fullText) {
+      setIsDeleting(true);
+      setIndex(prevIndex => prevIndex - 1);
+      setDelta(period);
+    } else if (isDeleting && updatedText === '') {
+      setIsDeleting(false);
+      setLoopNum(loopNum + 1);
+      setIndex(1);
+      setDelta(500);
+    } else {
+      setIndex(prevIndex => prevIndex + 1);
+    }
+  }
 
   return (
-    <div style={{ backgroundColor: 'black' }}>
-      <center>
-        <h1>L I T I A I N A</h1>
-        <img src={Logo} alt="Logo" />
-      </center>
-    </div>
-  );
-};
+    <section className="banner" id="home">
+      <Container>
+        <Row className="aligh-items-center">
+          <Col xs={12} md={6} xl={7}>
+            <TrackVisibility>
+              {({ isVisible }) =>
+              <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
+                <span className="tagline">Welcome to the world of Litiaina</span>
+                <h1>{`Hi! I'm Altear`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "the First Being, to have existed long before the world came into being." ]'><span className="wrap">{text}</span></span></h1>
+                  <p>Welcome to the haunting realms of Litiaina! Embark on a journey through dark fantasy horror and uncover the chilling secrets that lie within. Prepare for a spine-tingling adventure like no other. Dare to explore, for the shadows await your arrival.</p>
+                  <button onClick={() => window.location.href = '/login'}>Let’s Connect <ArrowRightCircle size={25} /></button>
+              </div>}
+            </TrackVisibility>
+          </Col>
+          <Col xs={12} md={6} xl={5}>
+            <TrackVisibility>
+              {({ isVisible }) =>
+                <div className={isVisible ? "animate__animated animate__zoomIn" : ""}>
+                  <img src={headerImg} alt="Header Img"/>
+                </div>}
+            </TrackVisibility>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+  )
+}
 
-export default HomePage;
+export default Dashboard;

@@ -1,35 +1,58 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Navbar, Container, Nav } from "react-bootstrap";
+import logo from '../assets/img/logo-remove.png';
 
-const Navbar = () => {
+
+
+const NavBar = () => {
+  const [activeLink, setActiveLink] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleLogin = (e) => {
+    window.location.href = '/login';
+  }
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const onUpdateActiveLink = (value) => {
+    setActiveLink(value);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <Link to="/" className="navbar-brand">Zambo-Sysarch-3A</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <Navbar bg="light" expand="lg" className={scrolled ? "scrolled" : ""}>
+      <Container>
+        <Navbar.Brand href="#home">
+          <img src={logo} alt="Logo" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav">
           <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to="/" className="nav-link">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about" className="nav-link">About</Link>
-            </li>
-          </ul>
-        </div>
-        <div className="ml-auto">
-          <div className="d-inline-block mr-5">
-            <Link to="/login" className="btn btn-outline-primary">Login</Link>
-          </div>
-          <div className="d-inline-block">
-            <Link to="/signup" className="btn btn-primary">Sign up</Link>
-          </div>
-        </div>
-      </div>
-    </nav>
+        </Navbar.Toggle>
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/" className={`navbar-link home ${activeLink === 'home' ? 'active' : ''}`} onClick={() => window.location.href = '/'}>Home</Nav.Link>
+            <Nav.Link href="/skills" className={`navbar-link skills ${activeLink === 'skills' ? 'active' : ''}`} onClick={() => window.location.href = '/skills'}>Skills</Nav.Link>
+          </Nav>
+          <span className="navbar-text">
+            <button className="vvd" onClick={handleLogin}>
+              <span>Let's Connect</span>
+            </button>
+          </span>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default NavBar;

@@ -61,7 +61,7 @@ function Login() {
             </button>
           </div>
           <p className="text-center mt-2">
-            Already have an <a href="#">account?</a>
+          <a href="/signup">create account?</a>
           </p>
         </div>
       </form>

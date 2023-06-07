@@ -79,7 +79,7 @@ function Signup() {
             </button>
           </div>
           <p className="text-center mt-2">
-            Already have an <a href="#">account?</a>
+          <a href="/login">Already have an account?</a>
           </p>
         </div>
       </form>
